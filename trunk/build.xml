@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="sample" default="build">
+
+	<property name="src" value="src"/>
+	<property name="deploy" value="deploy"/>
+	<property name="classes" value="classes"/>
+
+	<!-- - - - - - - - - - - - - - -->
+	<!--  target: init             -->
+	<!-- - - - - - - - - - - - - - -->
+	<target name="init">
+		 <mkdir dir="${classes}"/>
+		 <delete dir="${deploy}"/>	
+		 <mkdir dir="${deploy}"/>
+	</target>
+
+	<!-- - - - - - - - - - - - - - -->
+	<!--  target: clean             -->
+	<!-- - - - - - - - - - - - - - -->
+	<target name="clean">	
+	 	<delete dir="${classes}"/>		
+	</target>
+
+	<path id="compile.classpath">
+		<pathelement path="${java.class.path}/"/>
+		<pathelement location="${project.output.home}"/>			
+	</path>
+	
+	<!-- ========================= -->
+	<!--   target: build           -->
+	<!-- ========================= -->
+	<target name="build" depends="init" description="--> compile this component">		
+		<javac source="1.4" srcdir="${src}" destdir="${classes}" debug="true" optimize="true">
+			<classpath refid="compile.classpath" />
+		</javac>	
+		<antcall target="jar" />		
+		
+	<!-- Copy assets like run.bat readme etc... -->
+ 	  <copy todir="${deploy}">
+            <fileset dir="./assets"/>
+          </copy>
+		
+		<antcall target="clean" />	
+	</target>
+	    <!-- jar the project -->
+    <target name="jar">
+		<echo message=" Jaring "/>
+		 <jar destfile="${deploy}/captcha.jar" basedir="${classes}">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}"/>
+                <!--
+                <attribute name="Main-Class" value="com.abs.configsplitter.Main"/>
+                -->
+            </manifest>
+        </jar>		
+	</target>	
+</project>
