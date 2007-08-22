@@ -24,7 +24,8 @@ public class Driver {
 	 */
 	public static void main(String[] args)throws Exception {
 		Properties props = new Properties(); 
-		props.put("format", "png");
+		String ext="jpg";
+		props.put("format", ext);
 		props.put("font", "Helvetica");
 		props.put("fontsize", "28");
 		props.put("min-width", "180");
@@ -36,7 +37,7 @@ public class Driver {
 		//Locale.setDefault(locale);
 		for(int i=0;i<3 ;i++){
 				long ts=System.currentTimeMillis();
-				String filename=i+"_img_test.png";
+				String filename=i+"_img_test."+ext;
 				OutputStream os = new FileOutputStream("c:/captcha/"+filename);	 				
 				
 				FactoryRandomImpl inst=(FactoryRandomImpl)Producer.forName("org.smx.captcha.impl.FactoryRandomImpl");
