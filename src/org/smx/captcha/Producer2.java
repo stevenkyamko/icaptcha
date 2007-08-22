@@ -43,7 +43,7 @@ public class Producer2 {
 			pix[index++] = (255 << 24) | (red << 16) | blue;
 		    }
 		}
-		   Image img = tk.createImage(new MemoryImageSource(w, h, pix, 0, w));
+		   ImageHelper img = tk.createImage(new MemoryImageSource(w, h, pix, 0, w));
 		 
 			String filename="img_test.jpg";
 		   //Write image to the Disk
@@ -58,7 +58,7 @@ public class Producer2 {
 			    // Create a graphics context on the buffered image
 			    Graphics2D g2d = img2Write.createGraphics();
 			    g2d.setColor(new Color(150,150,150));
-			    g2d.drawString("No Image ",5, 5);
+			    g2d.drawString("No ImageHelper ",5, 5);
 			    g2d.dispose();
 	*/		
 				String filename="img_test.jpg";

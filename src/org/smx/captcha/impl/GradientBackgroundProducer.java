@@ -57,7 +57,6 @@ public class GradientBackgroundProducer implements IBackgroundProducer {
 	}
 
 	public void setProperties(Properties props) {
-		
 		this.props=props;
 	}
 

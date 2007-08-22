@@ -5,11 +5,13 @@ import java.io.OutputStream;
 import java.util.Locale;
 import java.util.Properties;
 
+import org.smx.captcha.impl.BackgroundImageAssembler;
 import org.smx.captcha.impl.BoxedbackgroundProducer;
 import org.smx.captcha.impl.CleanbackgroundProducer;
 import org.smx.captcha.impl.FactoryLanguageImpl;
 import org.smx.captcha.impl.FactoryRandomImpl;
 import org.smx.captcha.impl.GradientBackgroundProducer;
+import org.smx.captcha.impl.GridBackgroundProducer;
 
 public class Driver {
 
@@ -22,7 +24,7 @@ public class Driver {
 	 */
 	public static void main(String[] args)throws Exception {
 		Properties props = new Properties(); 
-		props.put("format", "jpg");
+		props.put("format", "png");
 		props.put("font", "Helvetica");
 		props.put("fontsize", "28");
 		props.put("min-width", "180");
@@ -32,13 +34,13 @@ public class Driver {
 		//Set the default locale to custom locale
 		//Locale locale = new Locale("ru","RU");
 		//Locale.setDefault(locale);
-		for(int i=0;i<5 ;i++){
+		for(int i=0;i<3 ;i++){
 				long ts=System.currentTimeMillis();
 				String filename=i+"_img_test.png";
 				OutputStream os = new FileOutputStream("c:/captcha/"+filename);	 				
 				
 				FactoryRandomImpl inst=(FactoryRandomImpl)Producer.forName("org.smx.captcha.impl.FactoryRandomImpl");
-				inst.setSize(6);
+				inst.setSize(8);
 				
 				/*
 				FactoryLanguageImpl inst=(FactoryLanguageImpl)Producer.forName("org.smx.captcha.impl.FactoryLanguageImpl");
@@ -46,20 +48,38 @@ public class Driver {
 				inst.setLanguage("EN");
 				inst.setRange(5, 10);	
 				*/
-				IBackgroundProducer back;
 				//back =  new CleanbackgroundProducer();
-				//back =  new BoxedbackgroundProducer();
-				back =  new GradientBackgroundProducer();
-				
-				Properties backProp=new Properties();
+				/*
+				back =  new BoxedbackgroundProducer();
 				backProp.put("background","E3F1FD");
 				backProp.put("border-color","FF0080");
 				backProp.put("intersect","true");
 				backProp.put("maxboxes","20");
 				backProp.put("minboxes","5");
+				*/
 				
-				back.setProperties(backProp);
-				inst.setBackGroundImageProducer( back );
+				IBackgroundProducer backGrid =  new GridBackgroundProducer();
+				Properties backProp=new Properties();
+				backProp.put("background","E3F1FD");
+				backProp.put("frequency","20");
+				
+				backGrid.setProperties(backProp);
+				
+				
+				IBackgroundProducer backBoxed =  new BoxedbackgroundProducer();
+				backProp.put("background","E3F1FD");
+				backProp.put("border-color","FF0080");
+				backProp.put("intersect","true");
+				backProp.put("maxboxes","20");
+				backProp.put("minboxes","7");
+				
+				
+				BackgroundImageAssembler backgroundAssembler=new BackgroundImageAssembler();				
+				backgroundAssembler.registerBackgroundProducer( backBoxed );
+				backgroundAssembler.registerBackgroundProducer( backGrid );
+				
+				inst.setBackGroundImageProducer( backgroundAssembler );
+				
 				
 				Producer.render(os, inst, props);
 				/*
