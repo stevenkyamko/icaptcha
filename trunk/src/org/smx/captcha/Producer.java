@@ -1,4 +1,5 @@
 package org.smx.captcha;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Font;
@@ -27,6 +28,7 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import org.smx.captcha.impl.BoxedbackgroundProducer;
 import org.smx.captcha.impl.DefaultBackgroundImpl;
 
 
@@ -73,10 +75,17 @@ public class Producer {
 		if(!format.equals("jpg") || !format.equals("png")){
 			format="jpg";
 		}
-		return ImageIO.write(drawString(inst, props), format, os);		
+		format="png";
+		
+		return ImageIO.write(renderImage(inst, props), format, os);		
 	}
-	
-	private static BufferedImage drawString( IWordFactory inst, Properties props){	
+	/**
+	 * Renders the ImageHelper
+	 * @param inst
+	 * @param props
+	 * @return
+	 */
+	private static BufferedImage renderImage(IWordFactory inst, Properties props){	
 			 IBackgroundProducer BackGroundProducer;
 			 int fontSize=25;
 			 int min_width=-1;
@@ -84,7 +93,7 @@ public class Producer {
 			 String text=inst.getWord().toUpperCase();
 			 
 			 /*
-			  * Default Properties
+			  *  Default Properties
 			  *  format - PNG, JPG  default JPG
 			  *  font - Java Font Name default "Helvetica"
 			  *  fontsize - defaults to  20
@@ -115,7 +124,7 @@ public class Producer {
 		     GraphicsDevice gs = ge.getDefaultScreenDevice();
 		     GraphicsConfiguration gc = gs.getDefaultConfiguration();
 		     // Create an image that supports arbitrary levels of transparency
-		     BufferedImage buffer = gc.createCompatibleImage(1, 1, BufferedImage.TYPE_INT_RGB);		     
+		     BufferedImage buffer = gc.createCompatibleImage(1, 1, BufferedImage.TYPE_INT_ARGB);		     
 		     
 		     Graphics2D g2 = (Graphics2D)buffer.getGraphics();
 			  g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -142,44 +151,52 @@ public class Producer {
 		     
 		     //prepare buffer with new widht and size
 		     buffer = new BufferedImage(width, height,
-		                                BufferedImage.TYPE_INT_RGB);
+		                                BufferedImage.TYPE_INT_ARGB);
 		     //Recreating with new Size 
 		     g2 = buffer.createGraphics();
 		     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 		                         RenderingHints.VALUE_ANTIALIAS_ON);
-	     
-		     g2.setFont(font);		     		     
-	         g2.setColor(new Color(0,0,0));
-		
-	         	//Render background
-		     	BackGroundProducer.addBackground( buffer );
-	         	Rectangle2D letterBounds=null;
+	       
 		     
-		     	float   dt=0;
-			    int   i=0;
+		     AlphaComposite ac =  AlphaComposite.getInstance(AlphaComposite.SRC);
+		     g2.setComposite(ac);
+		     g2.setColor(Color.white);
+		     g2.fillRect(0, 0, width, height);
+			     
+		     int fontColor=0x000000;
+		     g2.setFont(font);		     		     
+		     g2.setColor(new Color(fontColor));
+	         
+	           //Render background		     	
+		        g2.drawImage(BackGroundProducer.addBackground( buffer ),0,0, null);
+		      	Rectangle2D letterBounds=null;
+		     
+		     	float  dt=0;
+			    int    i=0;
 			    int numberOfPoints=text.length();
 			    BezierPoint2D[] curve=new BezierPoint2D[numberOfPoints];
 			    BezierPoint2D[] cp = new BezierPoint2D[4];
 			    for(int k=0;k<cp.length;k++){
 			    	cp[k]=new BezierPoint2D();
 			    }
-			    
+		    
 			    int startXPosition=padding_x/2;
 				int loc=(yBounds/2);
 			   	int diff=(height-yBounds)/2;			  
 			   	
-			   	
-			   	int signA=( new Random().nextInt((int)System.currentTimeMillis())%2==1)?1:(-1);
-			 	// P1 Bottom 1
+			   	int iMills=Math.abs((int)System.currentTimeMillis());
+			   	int signA=( new Random().nextInt(iMills)%2==1)?1:(-1);
+			 	
+			   	// P1 Bottom 1
 			    cp[0].x=startXPosition;			  
 			    cp[0].y=loc+( new Random().nextInt(diff)*signA);							  
 			    
-			    int signB=( new Random().nextInt((int)System.currentTimeMillis())%2==1)?1:(-1);
+			    int signB=( new Random().nextInt(iMills)%2==1)?1:(-1);
 			    //P2 Top 1
 			    cp[1].x=startXPosition;			  	
 			    cp[0].y=loc+(new Random().nextInt(diff)*signB);	
 			    
-			    int signC=( new Random().nextInt((int)System.currentTimeMillis())%2==1)?1:(-1);
+			    int signC=( new Random().nextInt(iMills)%2==1)?1:(-1);
 				if(signA==signC){
 					signC=signC*-1;
 				}
@@ -188,7 +205,7 @@ public class Producer {
 			    cp[2].y=loc+(new Random().nextInt(diff)*signC);	
 			   
 			    //P4 Bottom 2			    
-			    int signD=( new Random().nextInt((int)System.currentTimeMillis())%2==1)?1:(-1);
+			    int signD=( new Random().nextInt(iMills)%2==1)?1:(-1);
 			    cp[3].x=width-padding_x/2;			    
 			    cp[3].y=loc+(new Random().nextInt(diff)*signD);
 			    
@@ -236,7 +253,7 @@ public class Producer {
 			    	g2.drawRect(xpos,ypos, 1,1 );
 			    }
 			 	
-			    //Now only if the pixel is black then we need to add some noise
+			    //Now only if the pixel is black then we need to add some noise			 
 			    float data[] = { 0.0625f, 0.125f, 0.0625f, 0.125f, 0.25f, 0.125f,
 			            0.0625f, 0.125f, 0.0625f };
 			        Kernel kernel = new Kernel(3, 3, data);
@@ -245,7 +262,7 @@ public class Producer {
 			       
 					for (int y = 0; y < height; y++) {
 					    for (int x = 0; x < width; x++) {
-					    	if((Math.random()>.90)){
+					    	if((Math.random()>.93)){
 					    		int rgb=buffer.getRGB(x, y);					    		
 					    		int r,g,b;					    		
 					    		r=rgb>>16 & 0xFF;
@@ -257,7 +274,8 @@ public class Producer {
 					    	}					    	
 					    }
 					}
-					return convolve.filter(buffer, null);
+					
+			return  convolve.filter(buffer, null);
 		}
 
 	public static void console(Object o){

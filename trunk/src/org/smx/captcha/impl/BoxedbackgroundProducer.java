@@ -2,15 +2,20 @@
  * 
  */
 package org.smx.captcha.impl;
-
+import java.awt.geom.*;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.Properties;
 import java.util.Random;
 
 import org.smx.captcha.IBackgroundProducer;
+import org.smx.captcha.util.ImageHelper;
+
+import com.sun.imageio.plugins.common.ImageUtil;
 
 public class BoxedbackgroundProducer implements IBackgroundProducer{
 	 private Properties props;
@@ -18,7 +23,8 @@ public class BoxedbackgroundProducer implements IBackgroundProducer{
 		 props=new Properties();
 	 }
 	 public BufferedImage addBackground(BufferedImage image) {
-		 Graphics2D g2=image.createGraphics();
+		 int width=image.getWidth();
+		 int height=image.getHeight();
 		 int bacgroundRGB=Integer.parseInt(props.getProperty("background","E3F1FD"), 16);
 		 int maxBoxes=Integer.parseInt(props.getProperty("maxboxes","4"));
 		 int minBoxes=Integer.parseInt(props.getProperty("minboxes","2"));
@@ -26,17 +32,42 @@ public class BoxedbackgroundProducer implements IBackgroundProducer{
 		 boolean border=Boolean.parseBoolean( props.getProperty("border-visible","true") );
 		 int borderColor=Integer.parseInt ( props.getProperty("border-color","000000"),16);
 		 
+		 BufferedImage bimage=ImageHelper.createCompatibleImage(image);
+		 Graphics2D g2=bimage.createGraphics();		 
+		
+		 // Set best alpha interpolation quality
+		g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, 
+		RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 		 
-		 int width=image.getWidth();
-		 int height=image.getHeight();
-	   
+		 // Clear the image so all pixels have zero alpha
+		 g2.setComposite(AlphaComposite.Clear);
+		 g2.fillRect(0, 0, width, height);
+		 
+		 g2.setComposite(AlphaComposite.Src);
+
+		 
 		 int randNumberOfBoxes=0;
 		 do{
 			 randNumberOfBoxes =  new Random().nextInt(maxBoxes);	 
 		 }while(randNumberOfBoxes<minBoxes );
 			 
-		 g2.setColor(new Color(bacgroundRGB));
-	     g2.fillRect(0,0, width,height);
+				 
+		  //set transparency on the color
+		 int a_rgb,r_gb,g_gb,b_gb;
+	     a_rgb=bacgroundRGB >>24 & 0xFF;
+	     r_gb=bacgroundRGB  >>16 & 0xFF;
+		 g_gb=bacgroundRGB  >>8  & 0xFF;
+		 b_gb=bacgroundRGB  >>0  & 0xFF;
+		
+		 a_rgb=250;
+
+		 
+	     //pack the color 
+		 bacgroundRGB=(a_rgb<<24)|(r_gb<<16)|(g_gb<<8)|(b_gb<<0);
+		
+		 
+		  g2.setColor(new Color(bacgroundRGB));
+		 // g2.fillRect(0,0, width,height);
 	     
 	     Rectangle[] rectangler=new Rectangle[randNumberOfBoxes];
 	     for(int i=0;i<randNumberOfBoxes;i++)rectangler[i]=new Rectangle();
@@ -86,8 +117,7 @@ public class BoxedbackgroundProducer implements IBackgroundProducer{
 		    randNumberOfBoxes--;
 		    index++;
 	     }
-	     
-		return image;
+		return bimage;
 	}
 
 	public void setProperties(Properties props) {
