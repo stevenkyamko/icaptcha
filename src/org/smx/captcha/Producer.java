@@ -165,7 +165,7 @@ public class Producer {
 		//Recreating with new Size 
 		g2 = buffer.createGraphics();
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		
+				
 		AlphaComposite ac =  AlphaComposite.getInstance(AlphaComposite.SRC);
 		g2.setComposite(ac);
 		g2.setColor(Color.white);

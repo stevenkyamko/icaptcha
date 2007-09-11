@@ -38,7 +38,6 @@ public class GridBackgroundProducer  implements IBackgroundProducer{
 		 // Clear the image so all pixels have zero alpha
 		 g2.setComposite(AlphaComposite.Clear);
 		 g2.fillRect(0, 0, width, height);
-		 
 		 g2.setComposite(AlphaComposite.Src);
 	     
 	     int bacgroundGridRGB=0xFFFFFF;		     

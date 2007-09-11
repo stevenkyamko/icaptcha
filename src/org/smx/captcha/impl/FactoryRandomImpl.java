@@ -36,8 +36,7 @@ public class FactoryRandomImpl extends IWordFactory {
 				word+=s;
 			}
 		}
-		
-		return word;
+			return word;
 	}	
 
 }

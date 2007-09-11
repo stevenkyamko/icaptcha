@@ -24,7 +24,7 @@ public class Driver {
 	 */
 	public static void main(String[] args)throws Exception {
 		Properties props = new Properties(); 
-		String ext="jpg";
+		String ext="png";
 		props.put("format", ext);
 		props.put("font", "Helvetica");
 		props.put("fontsize", "28");
@@ -39,16 +39,16 @@ public class Driver {
 				long ts=System.currentTimeMillis();
 				String filename=i+"_img_test."+ext;
 				OutputStream os = new FileOutputStream("c:/captcha/"+filename);	 				
-				
+				/*
 				FactoryRandomImpl inst=(FactoryRandomImpl)Producer.forName("org.smx.captcha.impl.FactoryRandomImpl");
 				inst.setSize(8);
+				*/
 				
-				/*
 				FactoryLanguageImpl inst=(FactoryLanguageImpl)Producer.forName("org.smx.captcha.impl.FactoryLanguageImpl");
 				inst.setLanguageDirectory("C:\\captcha\\lang");
 				inst.setLanguage("EN");
 				inst.setRange(5, 10);	
-				*/
+				
 				//back =  new CleanbackgroundProducer();
 				/*
 				back =  new BoxedbackgroundProducer();
@@ -79,15 +79,17 @@ public class Driver {
 				backgroundAssembler.registerBackgroundProducer( backBoxed );
 				backgroundAssembler.registerBackgroundProducer( backGrid );
 				
-				inst.setBackGroundImageProducer( backgroundAssembler );
+				inst.setBackGroundImageProducer( backGrid );
 				
 				
 				Producer.render(os, inst, props);
-				/*
+				
+				
+				
 				System.out.println("inst hash="+inst.getHashCode());
 				System.out.println("inst word="+new String(inst.word));
 				System.out.println("Solved ="+inst.getHashCode(inst.word));
-				*/		
+						
 				long te=System.currentTimeMillis()-ts;				
 				System.out.println("time = "+te);
 		}
