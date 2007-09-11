@@ -4,7 +4,7 @@
 	<property name="src" value="src"/>
 	<property name="deploy" value="deploy"/>
 	<property name="classes" value="classes"/>
-
+	<property name="lib" value="lib"/>
 	<!-- - - - - - - - - - - - - - -->
 	<!--  target: init             -->
 	<!-- - - - - - - - - - - - - - -->
@@ -21,9 +21,15 @@
 	 	<delete dir="${classes}"/>		
 	</target>
 
+  <path id="classpath.lib">
+     <pathelement path="${lib}/junit.jar"/>
+     <pathelement location="${lib}"/>   
+  </path>
+
 	<path id="compile.classpath">
 		<pathelement path="${java.class.path}/"/>
-		<pathelement location="${project.output.home}"/>			
+		<pathelement location="${project.output.home}"/>	
+		<path refid="classpath.lib" />		
 	</path>
 	
 	<!-- ========================= -->
@@ -32,6 +38,7 @@
 	<target name="build" depends="init" description="--> compile this component">		
 		<javac source="1.4" srcdir="${src}" destdir="${classes}" debug="true" optimize="true">
 			<classpath refid="compile.classpath" />
+			<classpath refid="classpath.lib" />
 		</javac>	
 		<antcall target="jar" />		
 		
