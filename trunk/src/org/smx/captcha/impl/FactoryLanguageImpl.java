@@ -95,7 +95,12 @@ public class FactoryLanguageImpl extends IWordFactory {
 		} catch (CharacterCodingException e) {
 			e.printStackTrace();
 		}
-		return word;	
+		return word.toUpperCase();	
+	}
+	
+	
+	public String getHashCode(){
+		return getHashCode(word);
 	}
 	
 	public String getHashCode(String str){

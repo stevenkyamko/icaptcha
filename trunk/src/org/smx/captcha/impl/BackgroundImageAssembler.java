@@ -29,20 +29,19 @@ public class BackgroundImageAssembler implements ImageAssembler  {
 	}
 	
 	
-	public BufferedImage addBackground(BufferedImage image) {
-		BufferedImage mergedImage=ImageHelper.createCompatibleImage(image);
-		Graphics2D g2=mergedImage.createGraphics();	
-		g2.setComposite( AlphaComposite.DstOver );
-		// Set best alpha interpolation quality
-		g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-		
-		for(int i=0;i<producers.size();i++){
-			BufferedImage a=((IBackgroundProducer)producers.get( i )).addBackground( image );
-			g2.drawImage( a ,0,0, null);
-		}
-		
-		return mergedImage;
+public BufferedImage addBackground(BufferedImage image) {
+	BufferedImage mergedImage=ImageHelper.createCompatibleImage(image);
+	Graphics2D g2=mergedImage.createGraphics();	
+	g2.setComposite( AlphaComposite.DstOver );
+	// Set best alpha interpolation quality
+	g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+	for(int i=0;i<producers.size();i++){
+		BufferedImage a=((IBackgroundProducer)producers.get( i )).addBackground( image );
+		g2.drawImage( a ,0,0, null);
 	}
+	
+	return mergedImage;
+}
 	
 	
 	public void setProperties(Properties props) {
