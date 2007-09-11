@@ -95,7 +95,7 @@ public class FactoryLanguageImpl extends IWordFactory {
 		} catch (CharacterCodingException e) {
 			e.printStackTrace();
 		}
-		return word.toUpperCase();	
+		return (word=word.toUpperCase());	
 	}
 	
 	
