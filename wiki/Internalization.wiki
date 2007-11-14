@@ -1,0 +1,21 @@
+#summary How is internalization implemented in icaptcha.
+#labels Featured
+
+= Introduction =
+
+Brief description on how I have implemented internalization in this project, how can end user extend and provide their own language files.
+
+
+= Language file definitions.=
+
+Each language pack consits of *two* files
+
+  * .dic
+  * .aff
+
+===Example set===
+languagefile.dic languagefile.aff
+
+The *.aff* file contains one line indicating the encoding used itn the *.dic* file,
+if *.aff* file is not present default enconding will be assumed _ISO8859-1_
+
