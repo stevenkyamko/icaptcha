@@ -18,4 +18,12 @@ languagefile.dic languagefile.aff
 
 The *.aff* file contains one line indicating the encoding used itn the *.dic* file,
 if *.aff* file is not present default enconding will be assumed _ISO8859-1_
+Format for the *.dic* files is simple one word per line
+===Example set===
+{{{
+wordA
+wordB
+wordC
+}}}
 
+Original files were downloaded from Mozilla website, then stipped down from extra information and addapted to this project.
