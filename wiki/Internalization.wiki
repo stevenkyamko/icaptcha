@@ -27,5 +27,3 @@ wordC
 }}}
 
 Original files were downloaded from Mozilla website, then stipped down from extra information and addapted to this project.
-
-[Internalization Internal] 
