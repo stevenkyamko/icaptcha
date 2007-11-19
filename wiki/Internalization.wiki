@@ -14,6 +14,8 @@ default implementation for some of the methods so that the person extending/ imp
 
 
 
+
+
 = Language file definitions.=
 
 Each language pack consist of *two* files
@@ -34,4 +36,12 @@ wordB
 wordC
 }}}
 
-Original files were downloaded from Mozilla website, then stipped down from extra information and addapted to this project.
+
+
+=Redistributable Languages=
+    * English -ISO8859-1
+    * Polish - ISO8859-2
+    * Russian - KOI8-R
+    * German - ISO8859-1
+
+Language files were downloaded from https://addons.mozilla.org/en-US/firefox/browse/type:3 and are governed by they license agreement, this files have been slightly modified by me. 
