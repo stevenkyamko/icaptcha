@@ -16,8 +16,9 @@ props.put("min-width", "180");
 props.put("padding-x", "25"); 
 props.put("padding-y", "25"); 
 OutputStream os = new FileOutputStream("c:/captcha/text.jpg"); 
-FactoryLanguageImpl inst=(FactoryLanguageImpl)Producer.forName("org.smx.captcha.impl.FactoryLanguageImpl"); inst.setLanguageDirectory("C:/captcha/lang"); 
+FactoryLanguageImpl inst=(FactoryLanguageImpl)Producer.forName("org.smx.captcha.impl.FactoryLanguageImpl"); 
+inst.setLanguageDirectory("C:/captcha/lang"); 
 inst.setLanguage("RU"); 
-inst.setRange(5, 10); //Select words bettween 5-10 letters
+inst.setRange(5, 10); //Select words between 5-10 letters
 Producer.render(os, inst, props);
 }}}
