@@ -5,10 +5,18 @@
 
 Brief description on how I have implemented internalization in this project, how can end user extend and provide their own language files.
 
+Currently iCAPTCHA comes with two default WordProducers [FactoryLanguageImpl, FactoryRandomImpl] any one can  create new WordProducer by extending 'abstract class IWordFactory' and then calling it using following syntax;
+{{{
+MyWordProducerImpl inst=(MyWordProducerImpl)Producer.forName("org.me.MyWordProducerImpl");
+}}}
+I have choosen to use abstract class instead of Interface because I wanted to provide so 
+default implementation for some of the methods so that the person extending/ implementing it wouldn't have to worry about everything.
+
+
 
 = Language file definitions.=
 
-Each language pack consits of *two* files
+Each language pack consist of *two* files
 
   * .dic
   * .aff
