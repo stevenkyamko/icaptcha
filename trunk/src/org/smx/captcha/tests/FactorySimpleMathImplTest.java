@@ -1,6 +1,8 @@
 package org.smx.captcha.tests;
 
 
+import java.util.Properties;
+
 import org.smx.captcha.Producer;
 
 import org.smx.captcha.impl.FactorySimpleMathImpl;
@@ -13,15 +15,21 @@ public class FactorySimpleMathImplTest extends TestCase {
 		junit.textui.TestRunner.run(FactorySimpleMathImplTest.class);
 	}
 
-	
 	/*
 	 * Test method for 'org.smx.captcha.impl.FactorySimpleMathImpl.getWord()'
 	 */
 	public void testGetWord() throws Exception {
 		FactorySimpleMathImpl inst=(FactorySimpleMathImpl)Producer.forName("org.smx.captcha.impl.FactorySimpleMathImpl");
+		
+		Properties props=new Properties();
+		props.setProperty("min","1");
+		props.setProperty("max","5");
+		props.setProperty("symbols","3");
+		
+		inst.setProperties(props);
 		assertNotNull( inst );
 		
-		inst.getHashCode(inst.getWord());
+		System.out.println("HashSolved="+inst.getHashCode(inst.getWord()));
 		System.out.println("Solved For="+inst.getLastWord());
 	}
 

@@ -33,7 +33,7 @@ public class ProducerForcedAlphaChannelTest extends TestCase {
 	
 		Properties backProp;
 		backGrid =  new GridBackgroundProducer();
-		 backProp=new Properties();
+		backProp=new Properties();
 		backProp.put("background","E3F1FD");
 		backProp.put("frequency","20");
 		

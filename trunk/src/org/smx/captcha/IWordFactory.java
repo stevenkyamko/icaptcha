@@ -10,11 +10,19 @@ import java.util.Properties;
 public abstract class  IWordFactory {
 	protected static IWordFactory instance;
 	public String word;
-	protected IBackgroundProducer BackgroundImageProducer;
+	protected IBackgroundProducer backgroundImageProducer;
 	protected java.util.Properties props;
 	public IWordFactory(){};
 	public static IWordFactory getInstance(){ return null; };
+	/**
+	 * 
+	 * @return next world
+	 */
 	protected String getWord(){ return ""; };
+	/**
+	 * 
+	 * @return lastword generated
+	 */
 	public String getLastWord(){ return word; };	
 	public void setProperties(java.util.Properties props){
 		this.props=props;
@@ -34,10 +42,10 @@ public abstract class  IWordFactory {
 	public String getHashCode(String str){ return ""+str.hashCode(); };
 	
 	public  void setBackGroundImageProducer(IBackgroundProducer background){
-		this.BackgroundImageProducer=background;
+		this.backgroundImageProducer=background;
 	}
 	
 	public  IBackgroundProducer getBackGroundImageProducer(){
-		return this.BackgroundImageProducer;
+		return this.backgroundImageProducer;
 	}
 }
