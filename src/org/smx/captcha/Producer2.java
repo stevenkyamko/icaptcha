@@ -82,8 +82,7 @@ public class Producer2 {
 		     GraphicsDevice gs = ge.getDefaultScreenDevice();
 		     GraphicsConfiguration gc = gs.getDefaultConfiguration();
 		     // Create an image that supports arbitrary levels of transparency
-		     BufferedImage buffer = gc.createCompatibleImage(1, 1, BufferedImage.TYPE_INT_RGB);		     
-		     
+		     BufferedImage buffer = gc.createCompatibleImage(1, 1, BufferedImage.TYPE_INT_RGB);		     		     
 		     Graphics2D g2 = (Graphics2D)buffer.getGraphics();
 			 
 		     g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,

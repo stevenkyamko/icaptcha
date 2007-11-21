@@ -1,26 +1,17 @@
 package org.smx.captcha;
 import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Composite;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
-import java.awt.Transparency;
-import java.awt.color.ColorSpace;
 import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
-import java.awt.image.MemoryImageSource;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.Properties;
@@ -29,7 +20,6 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import org.smx.captcha.impl.BackgroundImageAssembler;
-import org.smx.captcha.impl.BoxedbackgroundProducer;
 import org.smx.captcha.impl.DefaultBackgroundImpl;
 
 
@@ -54,6 +44,12 @@ public class Producer {
 		return (IWordFactory)o;
 	}
 	
+	/**
+	 * Finds the getInstance Method
+	 * @param cls
+	 * @return
+	 * @throws Exception
+	 */
 	private static Method findGetInstance(Class cls)throws Exception
 	{
 		java.lang.reflect.Method[] methods = cls.getMethods();
@@ -62,6 +58,8 @@ public class Producer {
 			if (methods[i].getName().equals("getInstance"))
 				return methods[i];
 		}
+		
+		//we should never be here
 		return null;
 	}
 	
@@ -85,6 +83,7 @@ public class Producer {
 		}else{//Valid JPG Format
 			IMAGE_TYPE_BUFFERED=BufferedImage.TYPE_INT_RGB;
 		}
+		
 		//PutBack fixed format
 		props.put("format",format);
 		System.out.println(IMAGE_TYPE_BUFFERED);
@@ -120,9 +119,9 @@ public class Producer {
 			console("Using Defaults");
 		}
 		String fontName=props.getProperty("font", Constants.DEFAULT_FONT_NAME);			 
-		fontSize=Integer.parseInt(props.getProperty("fontsize", Constants.DEFAULT_FONT_SIZE));			 
-		min_width=Integer.parseInt(props.getProperty("min-width", Constants.DEFAULT_IMGAE_WIDTH));
-		min_height=Integer.parseInt(props.getProperty("min-height", Constants.DEFAULT_IMGAE_HEIGHT));
+		fontSize=Integer.valueOf(props.getProperty("fontsize", Constants.DEFAULT_FONT_SIZE));			 
+		min_width=Integer.valueOf(props.getProperty("min-width", Constants.DEFAULT_IMGAE_WIDTH));
+		//min_height=Integer.valueOf(props.getProperty("min-height", Constants.DEFAULT_IMGAE_HEIGHT));
 		
 		BackGroundProducer=inst.getBackGroundImageProducer();			 
 		//We use default implementation of BackGrdoundProducer
@@ -146,9 +145,10 @@ public class Producer {
 		
 		int yBounds=(int)bounds.getHeight();
 		int xBounds=(int) bounds.getWidth();
-		int padding_x=Integer.parseInt(props.getProperty("padding-x", Constants.DEFAULT_IMGAE_PADDING_X));
-		int padding_y=Integer.parseInt(props.getProperty("padding-y", (yBounds/2)+""));
+		int padding_x=Integer.valueOf(props.getProperty("padding-x", Constants.DEFAULT_IMGAE_PADDING_X));
+		int padding_y=Integer.valueOf(props.getProperty("padding-y", (yBounds/2)+""));
 		
+		boolean isBezieCurve=Boolean.valueOf(props.getProperty("curve", "true"));
 		//padding_y=30;
 		
 		// calculate the size of the text
@@ -200,30 +200,31 @@ public class Producer {
 		int loc=(yBounds/2);
 		int diff=(height-yBounds)/2;			  
 		
+		Random rnd=new Random();
 		int iMills=Math.abs((int)System.currentTimeMillis());
-		int signA=( new Random().nextInt(iMills)%2==1)?1:(-1);
+		int signA=( (rnd.nextInt(iMills)%2 & 1) ==1)?1:(-1);
 		
 		// P1 Bottom 1
 		cp[0].x=startXPosition;			  
-		cp[0].y=loc+( new Random().nextInt(diff)*signA);							  
+		cp[0].y=loc+( rnd.nextInt(diff)*signA);							  
 		
-		int signB=( new Random().nextInt(iMills)%2==1)?1:(-1);
+		int signB=( rnd.nextInt(iMills)%2==1)?1:(-1);
 		//P2 Top 1
 		cp[1].x=startXPosition;			  	
-		cp[0].y=loc+(new Random().nextInt(diff)*signB);	
+		cp[0].y=loc+(rnd.nextInt(diff)*signB);	
 		
-		int signC=( new Random().nextInt(iMills)%2==1)?1:(-1);
+		int signC=( rnd.nextInt(iMills)%2==1)?1:(-1);
 		if(signA==signC){
 			signC=signC*-1;
 		}
 		// P3 TOP 2
 		cp[2].x=width-startXPosition;
-		cp[2].y=loc+(new Random().nextInt(diff)*signC);	
+		cp[2].y=loc+(rnd.nextInt(diff)*signC);	
 		
 		//P4 Bottom 2			    
-		int signD=( new Random().nextInt(iMills)%2==1)?1:(-1);
+		int signD=( rnd.nextInt(iMills)%2==1)?1:(-1);
 		cp[3].x=width-padding_x/2;			    
-		cp[3].y=loc+(new Random().nextInt(diff)*signD);
+		cp[3].y=loc+(rnd.nextInt(diff)*signD);
 		
 		dt = 1.0f / ( numberOfPoints - 1 );
 		for( i = 0; i < numberOfPoints; i++){
@@ -250,25 +251,29 @@ public class Producer {
 			curve[i] = PointOnCubicBezier( cp, i*dt );
 		}
 		
-		//Create the line accross the text will be kind of fuzzy
-		font = new  Font("Helvetica", Font.BOLD + Font.ITALIC,  10);
-		g2.setFont(font);
-		int halfBoundHeight=yBounds/2;
-		int index=0;
-		for(int k=0;k<curve.length;k++){				    				    	
-			if(k %10 == 0){			    	
-				letterBounds=font.getStringBounds(""+text.charAt(index), fc);
-				halfBoundHeight = (int)letterBounds.getHeight()/3;
-				index++;
-			}
-			int xpos=(int)curve[k].x;
-			int ypos=(int)curve[k].y+halfBoundHeight+startYPosition;
-			int sign=(Math.random()>.5)?1:-1;	
-			if(sign==-1)
-				g2.drawRect(xpos,ypos-1, 1,1 );
-			g2.drawRect(xpos,ypos, 1,1 );
-		}
 		
+		
+		//Create the line accross the text will be kind of fuzzy
+		//Possible to disable by passing property curve=false
+		if(isBezieCurve){
+			font = new  Font("Helvetica", Font.BOLD + Font.ITALIC,  10);
+			g2.setFont(font);
+			int halfBoundHeight=yBounds/2;
+			int index=0;
+			for(int k=0;k<curve.length;k++){				    				    	
+				if(k %10 == 0){			    	
+					letterBounds=font.getStringBounds(""+text.charAt(index), fc);
+					halfBoundHeight = (int)letterBounds.getHeight()/3;
+					index++;
+				}
+				int xpos=(int)curve[k].x;
+				int ypos=(int)curve[k].y+halfBoundHeight+startYPosition;
+				int sign=(Math.random()>.5)?1:-1;	
+				if(sign==-1)
+					g2.drawRect(xpos,ypos-1, 1,1 );
+				g2.drawRect(xpos,ypos, 1,1 );
+			}
+		}
 		//Now only if the pixel is black then we need to add some noise			 
 		float data[] = { 0.0625f, 0.125f, 0.0625f, 0.125f, 0.25f, 0.125f,
 				0.0625f, 0.125f, 0.0625f };
