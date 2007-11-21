@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.Properties;
 
 import org.smx.captcha.IBackgroundProducer;
-import org.smx.captcha.ImageAssembler;
+import org.smx.captcha.IImageAssembler;
 import org.smx.captcha.util.ImageHelper;
 
 /**
@@ -17,7 +17,7 @@ import org.smx.captcha.util.ImageHelper;
  * @author gbugaj
  *
  */
-public class BackgroundImageAssembler implements ImageAssembler  {
+public class BackgroundImageAssembler implements IImageAssembler  {
 	private Properties props;
 	private List producers;
 	public BackgroundImageAssembler(){

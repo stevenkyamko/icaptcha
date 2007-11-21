@@ -84,8 +84,10 @@ public class FactoryLanguageImpl extends IWordFactory {
 		}	
 	    word="";
 		int len=0;
+		Random rnd = new Random(System.currentTimeMillis());
+		
 		do{//Make sure we are in range
-			word=(String)wordData.get(new Random().nextInt(wordData.size()));
+			word=(String)wordData.get(rnd.nextInt(wordData.size()));
 			len=word.length();
 		}while(len>=max || len<min);
 	   CharsetDecoder decoder = Charset.forName(encoding).newDecoder();
@@ -120,8 +122,7 @@ public class FactoryLanguageImpl extends IWordFactory {
 		BufferedReader encodingReader=null;		
 		try{
 			if(languageDirectory==null || languageDirectory.equals("")){
-				throw new Exception( " languageDirectory not set ");
-				
+				throw new Exception( " languageDirectory not set ");				
 			}
 			  String sFilename=language+".dic";			 
 			  wordData = new ArrayList();
@@ -142,11 +143,17 @@ public class FactoryLanguageImpl extends IWordFactory {
 				ex.printStackTrace();
 			} finally{
 				try{
-					bis.close();
-					bis=null;
-					encodingReader.close();
-					encodingReader=null;
-				}catch(Exception e){/*Suppresed*/}				
+					if(bis!=null){
+						bis.close();
+						bis=null;
+					}
+					if(encodingReader!=null){
+						encodingReader.close();
+						encodingReader=null;
+					}
+				}catch(Exception e){
+					/*Suppresed*/					
+				}				
 			}
 	}
 }
