@@ -87,8 +87,8 @@ public class Driver {
 				
 				
 				System.out.println("inst hash="+inst.getHashCode());
-				System.out.println("inst word="+new String(inst.word));
-				System.out.println("Solved ="+inst.getHashCode(inst.word));
+				System.out.println("inst word="+inst.getLastWord());
+				System.out.println("Solved ="+inst.getHashCode(inst.getLastWord()));
 						
 				long te=System.currentTimeMillis()-ts;				
 				System.out.println("time = "+te);

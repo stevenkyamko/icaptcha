@@ -35,6 +35,7 @@ public class BoxedbackgroundProducer implements IBackgroundProducer{
 		 BufferedImage bimage=ImageHelper.createCompatibleImage(image);
 		 Graphics2D g2=bimage.createGraphics();		 
 		
+		 Random rand= new Random();
 		 // Set best alpha interpolation quality
 		g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, 
 		RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
@@ -45,10 +46,10 @@ public class BoxedbackgroundProducer implements IBackgroundProducer{
 		 
 		 g2.setComposite(AlphaComposite.Src);
 
-		 
+		
 		 int randNumberOfBoxes=0;
 		 do{
-			 randNumberOfBoxes =  new Random().nextInt(maxBoxes);	 
+			 randNumberOfBoxes = rand.nextInt(maxBoxes);	 
 		 }while(randNumberOfBoxes<minBoxes );
 			 
 				 
@@ -82,13 +83,14 @@ public class BoxedbackgroundProducer implements IBackgroundProducer{
 	    	h=0;
 	    	int iter=0;
 	    	boolean intersect=false;
+	    	
 	    	while(true && iter<100){		    
-		    	x=new Random().nextInt(width);
-	    		y=new Random().nextInt(height);
+		    	x=rand.nextInt(width);
+	    		y=rand.nextInt(height);
 	    		while(h<=0)
-	    			h=new Random().nextInt(height  - y);
+	    			h=rand.nextInt(height  - y);
 	    		while(w<=0)
-	    			w=new Random().nextInt(width - x);
+	    			w=rand.nextInt(width - x);
 	    		
 	    		rect=new Rectangle(x,y,w,h);
 	    	
@@ -107,7 +109,7 @@ public class BoxedbackgroundProducer implements IBackgroundProducer{
     			}
 	    	}
     		
-	    	g2.setColor(new Color(new Random().nextInt(255), new Random().nextInt(255), new Random().nextInt(255)));
+	    	g2.setColor(new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
 		    g2.fillRect(x, y, w, h);
 		    
 		    if(border){

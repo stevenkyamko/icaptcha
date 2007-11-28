@@ -39,9 +39,9 @@ public class SimpleMathParserTest extends TestCase {
 		
 		Properties instProps;
 		instProps=new Properties();
-		instProps.put("min","10");
-		instProps.put("max","15");
-		instProps.put("symbols","3");
+		instProps.put("min","1");
+		instProps.put("max","5");
+		instProps.put("symbols","2");
 				
 		inst.setProperties(instProps);
 	}
@@ -69,6 +69,12 @@ public class SimpleMathParserTest extends TestCase {
 			inst.setBackGroundImageProducer( backgroundAssembler );
 				
 			Producer.render(os, inst, props);
+			
+			System.out.println("inst getLastWord="+inst.getLastWord());
+			long s=System.currentTimeMillis();
+			System.out.println("Solved ="+inst.getHashCode(inst.getLastWord()));
+			long e=System.currentTimeMillis()-s;
+			System.out.println("hash time="+e);
 		}
 		catch (FileNotFoundException e) {
 			e.printStackTrace();

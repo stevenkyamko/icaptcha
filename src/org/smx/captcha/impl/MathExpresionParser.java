@@ -6,28 +6,28 @@ public class MathExpresionParser {
 	private Stack opstack;
 	private String query;	
 	private int current_index;
-	private final int EOF=0;
-	private final String TOKEN_NUM = "NUM"; // 1234	
-	private final String TOKEN_IDENT = "IDENT"; // identifier
+	private final static int EOF=0;
+	private final static String TOKEN_NUM = "NUM"; // 1234	
+	private final static String TOKEN_IDENT = "IDENT"; // identifier
 	
 	private final int TYPE_OPERAND=1;
 	private final int TYPE_OPERATOR=2; // + - * /
 	
 	
 //	Signs
-	private final String TOKEN_ADD = "ADD";
-	private final String TOKEN_MINUS = "MIN";
-	private final String TOKEN_MULTIPLY = "MUL";
-	private final String TOKEN_DIVIDE = "DIV";
+	private final static String TOKEN_ADD = "ADD";
+	private final static String TOKEN_MINUS = "MIN";
+	private final static String TOKEN_MULTIPLY = "MUL";
+	private final static String TOKEN_DIVIDE = "DIV";
 	
 //	Precedence	
 	
-	private final int PREC_TOKEN_TOKEN_NUM = 0;
+	private final static int PREC_TOKEN_TOKEN_NUM = 0;
 	
-	private final int PREC_TOKEN_ADD = 1;
-	private final int PREC_TOKEN_MINUS = 1;
-	private final int PREC_TOKEN_MULTIPLY = 3; 
-	private final int PREC_TOKEN_DIVIDE = 2;
+	private final static int PREC_TOKEN_ADD = 1;
+	private final static int PREC_TOKEN_MINUS = 1;
+	private final static int PREC_TOKEN_MULTIPLY = 3; 
+	private final static int PREC_TOKEN_DIVIDE = 2;
 	
 	
 	
@@ -160,7 +160,7 @@ public class MathExpresionParser {
 		app.eval();
 	}
 	
-	public class Token{
+	private class Token{
 		int precedence=0;
 		int type=0; // 1= Operant 2=Operand
 		String value="";

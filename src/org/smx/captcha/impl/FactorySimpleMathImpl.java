@@ -19,7 +19,10 @@ import org.smx.captcha.IWordFactory;
  *
  */
 public class FactorySimpleMathImpl extends IWordFactory {
-	
+	//Prevent Explicit creation 
+	private FactorySimpleMathImpl(){
+		
+	}
 	private int current_index;
 	private String query;
 	private String symbols[]={"+","-"};
@@ -33,36 +36,46 @@ public class FactorySimpleMathImpl extends IWordFactory {
 	public String getWord(){
 		word="";
 		int minDigit=Integer.valueOf(getProperties().getProperty("min","1"));
-		int maxDigit=Integer.valueOf(getProperties().getProperty("max","20"));
+		int maxDigit=Integer.valueOf(getProperties().getProperty("max","10"));
 		int numberOfSymbols=Integer.valueOf(getProperties().getProperty("symbols","3"));
 		Random rnd=new Random();		
-		String lastSymbol="";
+		
 		//Can't have min>max
 		if(minDigit>maxDigit)
 		{
 			maxDigit=minDigit;
 			minDigit=maxDigit;
 		}
-		while(numberOfSymbols>0){
-			String symbol=symbols[rnd.nextInt(symbols.length)];			
-			int leftDig=1;			
+		System.out.println("numberOfSymbols="+numberOfSymbols);		
+		int symbolSize=symbols.length;
+		int rightDig=1;
+		int leftDig=1;	
+	    for(int i=0;i<numberOfSymbols;i++){			
+			String symbol=symbols[rnd.nextInt(symbolSize)];								
 			do{
 				leftDig=rnd.nextInt(maxDigit);
-				}while(leftDig<minDigit);
+			}while(leftDig<minDigit);
 			
-			int rightDig=1;			
 			do{
 				rightDig=rnd.nextInt(maxDigit);
 			}while(rightDig<minDigit);
 			
-			word+= lastSymbol+leftDig+symbol+rightDig;
-			lastSymbol=symbol;
-			numberOfSymbols-=2;
-		}
+			if(i%2==0)
+				word +=leftDig+symbol+rightDig;
+			else
+				word +=symbol;
+			
+	     }
+	    if(numberOfSymbols>1)
+	    	word +=rightDig;
+		
 		return word;
 	}	
 	
-	
+	/**
+	 * Advance to next character
+	 * @return
+	 */
 	private char read_ch() {
 		if (current_index == query.length())
 			return 0;
@@ -71,12 +84,17 @@ public class FactorySimpleMathImpl extends IWordFactory {
 		return ch;
 	}
 	
+	/**
+	 * Put one char back
+	 *
+	 */
 	private void put_back() {
 		current_index--;
 	}
 	
 	
-	public String getHashCode(String str){ 
+	public String getHashCode(String str){
+		current_index=0;
 		if(str==null){
 			str="";
 		}
@@ -125,8 +143,7 @@ public class FactorySimpleMathImpl extends IWordFactory {
 					case '-': {
 						left=left-right;
 						break;
-					}
-					
+					}					
 				}
 			opstack.push(left+"");
 		}else{
