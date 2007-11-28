@@ -23,7 +23,7 @@ import org.smx.captcha.impl.BackgroundImageAssembler;
 import org.smx.captcha.impl.DefaultBackgroundImpl;
 
 
-public class Producer {
+public final class Producer {
 	private static int  IMAGE_TYPE_BUFFERED;
 	public static boolean FORCE_ALPHA_CHANNEL=false;
 	/**
@@ -37,6 +37,11 @@ public class Producer {
 		ClassLoader cl=t.getContextClassLoader();
 		Class  cls = cl.loadClass( className );
 		Method inst=findGetInstance(cls);
+		
+		if(inst == null){
+			throw new ClassCastException("Passed In class "+ className +" does not implement getInstance() method");
+		}
+		
 		Object o=inst.invoke(null, new Object[]{});
 		if(!(o instanceof IWordFactory)){
 			throw new ClassCastException("Passed In class "+ className +" is not an instance of  org.smx.captcha.IWordFactory");
@@ -86,7 +91,6 @@ public class Producer {
 		
 		//PutBack fixed format
 		props.put("format",format);
-		System.out.println(IMAGE_TYPE_BUFFERED);
 		return ImageIO.write(renderImage(inst, props), format, os);		
 	}
 	/**
@@ -208,12 +212,12 @@ public class Producer {
 		cp[0].x=startXPosition;			  
 		cp[0].y=loc+( rnd.nextInt(diff)*signA);							  
 		
-		int signB=( rnd.nextInt(iMills)%2==1)?1:(-1);
+		int signB=( rnd.nextInt(iMills)%2!=0)?1:(-1);
 		//P2 Top 1
 		cp[1].x=startXPosition;			  	
 		cp[0].y=loc+(rnd.nextInt(diff)*signB);	
 		
-		int signC=( rnd.nextInt(iMills)%2==1)?1:(-1);
+		int signC=( rnd.nextInt(iMills)%2!=0)?1:(-1);
 		if(signA==signC){
 			signC=signC*-1;
 		}
@@ -222,7 +226,7 @@ public class Producer {
 		cp[2].y=loc+(rnd.nextInt(diff)*signC);	
 		
 		//P4 Bottom 2			    
-		int signD=( rnd.nextInt(iMills)%2==1)?1:(-1);
+		int signD=( rnd.nextInt(iMills)%2!=0)?1:(-1);
 		cp[3].x=width-padding_x/2;			    
 		cp[3].y=loc+(rnd.nextInt(diff)*signD);
 		

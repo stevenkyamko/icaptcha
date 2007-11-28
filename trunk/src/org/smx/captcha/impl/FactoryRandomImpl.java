@@ -5,7 +5,10 @@ import java.util.Random;
 import org.smx.captcha.IWordFactory;
 
 public class FactoryRandomImpl extends IWordFactory {
-	
+	//Can't create directly
+	private FactoryRandomImpl(){
+		
+	}
 	private int size=8;
 	private boolean useDigits;
 	public static IWordFactory getInstance() {
@@ -30,8 +33,9 @@ public class FactoryRandomImpl extends IWordFactory {
 		}
 		int len=az.length();
 		word="";
+		Random rand=new Random();
 		while(word.length()<size){
-			String s=""+az.charAt(new Random().nextInt( len ));
+			String s=""+az.charAt(rand.nextInt( len ));
 			if(word.indexOf(s)==-1){
 				word+=s;
 			}

@@ -19,13 +19,13 @@ import org.smx.captcha.util.ImageHelper;
  */
 public class BackgroundImageAssembler implements IImageAssembler  {
 	private Properties props;
-	private List producers;
+	private List<IBackgroundProducer> producers;
 	public BackgroundImageAssembler(){
-		producers=new ArrayList();
+		producers=new ArrayList<IBackgroundProducer>();
 		props= new Properties();
 	}
-	public void registerBackgroundProducer(IBackgroundProducer producer) {
-		producers.add( producer );			
+	public void registerBackgroundProducer(IBackgroundProducer<IBackgroundProducer> producer){		
+		producers.add(producer);			
 	}
 	
 	
@@ -35,9 +35,8 @@ public BufferedImage addBackground(BufferedImage image) {
 	g2.setComposite( AlphaComposite.DstOver );
 	// Set best alpha interpolation quality
 	g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-	for(int i=0;i<producers.size();i++){
-		BufferedImage a=((IBackgroundProducer)producers.get( i )).addBackground( image );
-		g2.drawImage( a ,0,0, null);
+	for(IBackgroundProducer emiter:producers){	
+		g2.drawImage( emiter.addBackground( image ) ,0,0, null);
 	}
 	
 	return mergedImage;

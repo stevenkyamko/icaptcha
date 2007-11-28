@@ -2,7 +2,7 @@ package org.smx.captcha;
 
 import java.awt.image.BufferedImage;
 
-public interface IBackgroundProducer {
+public interface IBackgroundProducer<T> {
 	public BufferedImage addBackground(BufferedImage image);
 	/**
 	 * BackGroundProducer specific properties like 'color', 'size' etc'

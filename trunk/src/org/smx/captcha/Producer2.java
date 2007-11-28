@@ -173,7 +173,7 @@ public class Producer2 {
 			    
 			    dt = 1.0f / ( numberOfPoints - 1 );
 			    for( i = 0; i < numberOfPoints; i++){
-			        curve[i] = PointOnCubicBezier( cp, i*dt );
+			        curve[i] = pointOnCubicBezier( cp, i*dt );
 			    }
 		     		  
 			    for(int k=0;k<curve.length;k++){
@@ -224,7 +224,7 @@ cp[3] is the end point, or P3 in the above diagram
 t is the parameter value, 0 <= t <= 1
 */
 
-public static BezierPoint2D PointOnCubicBezier( BezierPoint2D cp[], float t )
+public static BezierPoint2D pointOnCubicBezier( BezierPoint2D cp[], float t )
 {
     float   ax, bx, cx;
     float   ay, by, cy;
