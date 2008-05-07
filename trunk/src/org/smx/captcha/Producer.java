@@ -151,8 +151,7 @@ public final class Producer {
 		int xBounds=(int) bounds.getWidth();
 		int padding_x=Integer.valueOf(props.getProperty("padding-x", Constants.DEFAULT_IMGAE_PADDING_X));
 		int padding_y=Integer.valueOf(props.getProperty("padding-y", (yBounds/2)+""));
-		
-		boolean isBezieCurve=Boolean.valueOf(props.getProperty("curve", "true"));
+		boolean isBezierCurve=Boolean.valueOf(props.getProperty("curve", "true"));
 		//padding_y=30;
 		
 		// calculate the size of the text
@@ -259,7 +258,7 @@ public final class Producer {
 		
 		//Create the line accross the text will be kind of fuzzy
 		//Possible to disable by passing property curve=false
-		if(isBezieCurve){
+		if(isBezierCurve){
 			font = new  Font("Helvetica", Font.BOLD + Font.ITALIC,  10);
 			g2.setFont(font);
 			int halfBoundHeight=yBounds/2;

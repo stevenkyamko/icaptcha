@@ -170,7 +170,6 @@ public class Producer2 {
 			    cp[3].x=width-20;
 			    cp[3].y=height-20;
 			    
-			    
 			    dt = 1.0f / ( numberOfPoints - 1 );
 			    for( i = 0; i < numberOfPoints; i++){
 			        curve[i] = pointOnCubicBezier( cp, i*dt );

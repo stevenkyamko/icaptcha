@@ -31,11 +31,12 @@ public class Driver {
 		props.put("min-width", "180");
 		props.put("padding-x", "25");
 		props.put("padding-y", "25");
+		props.put("curve","false");
 		
 		//Set the default locale to custom locale
 		//Locale locale = new Locale("ru","RU");
 		//Locale.setDefault(locale);
-		for(int i=0;i<3 ;i++){
+		for(int i=0;i<1 ;i++){
 				long ts=System.currentTimeMillis();
 				String filename=i+"_img_test."+ext;
 				OutputStream os = new FileOutputStream("c:/captcha/"+filename);	 				
@@ -73,6 +74,7 @@ public class Driver {
 				backProp.put("intersect","true");
 				backProp.put("maxboxes","20");
 				backProp.put("minboxes","7");
+				
 				
 				
 				BackgroundImageAssembler backgroundAssembler=new BackgroundImageAssembler();				
