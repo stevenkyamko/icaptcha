@@ -1,6 +1,6 @@
 package org.smx.captcha;
 /**
- * Constanst used in the program as well as default values all default values are prefixed with DEFAULT
+ * Constants used in the program as well as default values all default values are prefixed with DEFAULT
  * @author gbugaj
  *
  */
